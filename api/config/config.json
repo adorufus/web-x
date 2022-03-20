@@ -1,0 +1,12 @@
+{
+    "development": {
+        "PORT": 8000,
+        "MONGO_URL": "mongodb://localhost:27017/webx",
+        "JWT_SECRET": "secretbangetnih123",
+        "JWT_EXP": "50000h"
+    },
+    "production": {
+        "PORT": 80,
+        "MONGO_URL": ""
+    }
+}
