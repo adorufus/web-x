@@ -54,7 +54,7 @@ const register = async (req, res, next) => {
     } else {
         res.status(400).json({
             status: "error",
-            message: "Username, email or password are required!"
+            message: "Username, email, role or password are required!"
         })
     }
 }

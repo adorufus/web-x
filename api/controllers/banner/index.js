@@ -1,5 +1,5 @@
 const root = {
-    banner: require('./bannerController'),
+    banner: require('./addBannerController'),
 }
 
 module.exports = root
