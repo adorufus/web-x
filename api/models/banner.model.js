@@ -8,9 +8,14 @@ var bannerSchema = new mongoose.Schema(
         url: {
             type: String,
         },
+        metaname: {
+            type: String,
+            required: true
+        },
         bannerFile: {
             data: Buffer,
-            type: String
+            type: String,
+            required: true
         },
     }
 )

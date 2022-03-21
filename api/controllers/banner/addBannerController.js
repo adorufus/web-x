@@ -15,34 +15,38 @@ const addBannerController = async (req, res) => {
   var banner = new Banner();
 
   uploadImage(req.file).then((value) => {
+
+    const metaname = value[1]["name"]
+
     value[0]
       .getSignedUrl({
         action: "read",
         expires: "03-09-4000",
       })
       .then((signedUrls) => {
-        console.log(signedUrls);
+        console.log(signedUrls)
 
-        banner.bannerName = file_name;
-        banner.url = go_to_url;
-        banner.bannerFile = signedUrls[0];
+        banner.bannerName = file_name
+        banner.url = go_to_url
+        banner.metaname = metaname
+        banner.bannerFile = signedUrls[0]
 
         console.log(value);
 
         banner.save((err, doc) => {
           if (err) {
-            console.log(err);
+            console.log(err)
             return res.status(400).json({
               status: "error",
               error: err,
-            });
+            })
           } else {
             return res.status(201).json({
               status: "success",
               message: "image uploaded",
-            });
+            })
           }
-        });
+        })
       })
       .catch((err) => {
         console.log("error: " + err);
