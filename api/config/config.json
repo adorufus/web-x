@@ -1,9 +1,13 @@
 {
     "development": {
         "PORT": 8000,
-        "MONGO_URL": "mongodb://localhost:27017/webx",
+        "MONGO_URL": "mongodb://127.0.0.1:5000/webx",
         "JWT_SECRET": "secretbangetnih123",
-        "JWT_EXP": "50000h"
+        "JWT_EXP": "50000h",
+        "IMAGE_KIT_PUBLIC": "public_N2OiSL6jwg7vzhsVhsdoYjUiKbQ=",
+        "IMAGE_KIT_PRIVATE": "private_r1PcdQSd4VdB4rbkjoeA2URAsIA=",
+        "CLOUDINARY_KEY": "167263166275682",
+        "CLOUDINARY_SECRET": "1HNJW5tdF73V5TQMzKma9108KTY"
     },
     "production": {
         "PORT": 80,

@@ -7,6 +7,6 @@ bannerRoute.post('/banner/add', [middlewares.verifyJwt.verifyToken, middlewares.
 bannerRoute.get('/banner/all', bannerController.banner.getAllBanner)
 bannerRoute.get('/banner', bannerController.banner.getBanner)
 bannerRoute.put('/banner/edit', [middlewares.verifyJwt.verifyToken, middlewares.filesUpload.single("image_file")], bannerController.banner.editBanner)
-// bannerRoute.delete('/banner/delete', middlewares.verifyJwt.verifyToken, bannerController.deleteBanner)
+bannerRoute.delete('/banner/delete', middlewares.verifyJwt.verifyToken, bannerController.banner.deleteBannerController)
 
 module.exports = bannerRoute

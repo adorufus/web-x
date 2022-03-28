@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const { storage } = require("firebase-admin");
 const Banner = mongoose.model("Banner");
+const image_kit = require("imagekit");
+const cloudinary = require("cloudinary");
+const { sample } = require("lodash");
 
 module.exports.getAllBanner = (req, res) => {
   Banner.find({}, (err, banners) => {
@@ -48,48 +51,89 @@ module.exports.getBanner = (req, res) => {
 module.exports.editBanner = async (req, res) => {
   var { banner_id, banner_name, go_to_url } = req.body;
 
-  if(banner_id) { 
+  if (banner_id) {
     Banner.findById(banner_id, (err, banner) => {
-        if (err) {
-          return res.status(400).json({
-            status: "error",
-            error: err,
+      if (err) {
+        return res.status(400).json({
+          status: "error",
+          error: err,
+        });
+      } else {
+        if (banner) {
+          updateImageBucket(req.file, banner["metaname"], res).then((value) => {
+            console.log(value);
+            // const bannerModel = new Banner();
+            // bannerModel.bannerName = banner_name;
+            // bannerModel.url = go_to_url;
+            // bannerModel.metaname = value["public_id"];
+            // bannerModel.bannerFile = value["secure_url"];
+
+            Banner.findByIdAndUpdate(
+              banner_id,
+              {
+                bannerName: banner_name,
+                url: go_to_url,
+                metaname: value["public_id"],
+                bannerFile: value["secure_url"],
+              },
+              (err, data) => {
+                if (err) {
+                  return res.status(400).json({
+                    status: "failed",
+                    error: err,
+                  });
+                } else {
+                  return res.status(200).json({
+                    status: "success",
+                    message: "Banner Updated",
+                    data: data,
+                  });
+                }
+              }
+            );
           });
         } else {
-          if (banner) {
-            updateImageBucket(req.file, banner["metaname"]).then((value) => {
-              const metaname = value[1]["name"];
-    
-              value[0]
-                .getSignedUrl({
-                  action: "read",
-                  expires: "03-09-4000",
-                })
-                .then((signedUrls) => {
-                  const bannerModel = new Banner();
-                  bannerModel.bannerName = banner_name;
-                  bannerModel.url = go_to_url;
-                  bannerModel.metaname = metaname;
-                  bannerModel.bannerFile = signedUrls[0];
-    
-                  Banner.findByIdAndUpdate(banner_id, bannerModel, (err, data) => {
-                    if (err) {
-                      return res.status(400).json({
-                        status: "failed",
-                        error: err,
-                      });
-                    } else {
-                      return res.status(200).json({
-                        status: "success",
-                        message: "Banner Updated",
-                        data: data,
-                      });
-                    }
-                  });
-                })
-                .catch((err) => {
-                  console.log(err);
+          return res.status(400).json({
+            status: "error",
+            error: "Banner not found",
+          });
+        }
+      }
+    });
+  } else {
+    return res.status(400).json({
+      status: "failed",
+      message: "field: Id is required!",
+    });
+  }
+};
+
+module.exports.deleteBannerController = async (req, res) => {
+  const banner_id = req.query.banner_id;
+
+  Banner.findById(banner_id, async (err, banner) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({
+        status: "failed!",
+        error: err,
+      });
+    } else {
+      if (banner) {
+        await deleteBanner(banner["metaname"], res).then((value) => {
+          if (value == "deleted") {
+            Banner.findByIdAndDelete(banner_id, (err, banner) => {
+              if (err) {
+                return res.status(400).json({
+                  status: "failed",
+                  error: err,
                 });
+              } else {
+                return res.status(200).json({
+                  status: "success",
+                  message: "Image deleted.",
+                });
+              }
             });
           } else {
             return res.status(400).json({
@@ -97,23 +141,50 @@ module.exports.editBanner = async (req, res) => {
               error: "Banner not found",
             });
           }
-        }
-      });
-  } else {
-      return res.status(400).json({
-          status: "failed",
-          message: "field: Id is required!"
-      })
-  }
+        });
+      }
+    }
+  });
 };
 
-const updateImageBucket = async (file, metaname) => {
-  const bucket = storage().bucket();
+const updateImageBucket = async (file, metaname, res) => {
+  var data;
 
-  await bucket.file(metaname).delete();
-  return await bucket.upload(file.path, {
-    metadata: {
-      contentType: file.mimetype,
-    },
+  await deleteBanner(metaname, res);
+
+  await cloudinary.v2.uploader.upload(file.path, (err, uploadResult) => {
+    if (err) {
+      return res.status(400).json({
+        status: "error",
+        type: "cloudinary upload",
+        error: err,
+      });
+    } else {
+      data = {
+        public_id: uploadResult.public_id,
+        secure_url: uploadResult.secure_url,
+      };
+    }
   });
+
+  return data;
+};
+
+const deleteBanner = async (metaname, res) => {
+  var data;
+  await cloudinary.v2.uploader.destroy(metaname, async (err, result) => {
+    if (err) {
+      console.log("Cloudinary error: " + err);
+      return res.status(400).json({
+        status: "error",
+        type: "cloudinary delete",
+        error: err,
+      });
+    } else {
+      console.log("Cloudinary response: " + JSON.stringify(result));
+      data = "deleted";
+    }
+  });
+
+  return data;
 };
