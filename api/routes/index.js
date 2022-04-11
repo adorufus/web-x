@@ -1,6 +1,7 @@
 const root = {
     authRoute: require('./auth'),
-    bannerRoute: require('./banner')
+    bannerRoute: require('./banner'),
+    newsRoute: require('./newsRoutes')
 }
 
 module.exports = root

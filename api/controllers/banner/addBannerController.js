@@ -4,6 +4,7 @@ const _ = require("lodash");
 const { storage } = require("firebase-admin");
 const uuidv4 = require("uuidv4");
 const cloudinary = require("cloudinary");
+const uploadImage = require("../../utils/imageUploader");
 
 const Banner = mongoose.model("Banner");
 
@@ -37,24 +38,6 @@ const addBannerController = async (req, res) => {
       }
     });
   });
-};
-
-const uploadImage = async (file) => {
-  var data;
-  await cloudinary.v2.uploader.upload(file.path, (err, result) => {
-    if (err) {
-      console.log("cloudinary err: " + err);
-      data = err;
-    } else {
-      console.log("cloudinary res: " + result);
-      data = {
-        public_id: result.public_id,
-        secure_url: result.secure_url,
-      };
-    }
-  });
-
-  return data;
 };
 
 module.exports = addBannerController;

@@ -112,6 +112,7 @@ module.exports.deleteBannerController = async (req, res) => {
   const banner_id = req.query.banner_id;
 
   Banner.findById(banner_id, async (err, banner) => {
+    console.log("finding....");
     if (err) {
       console.log(err);
       return res.status(400).json({
@@ -120,6 +121,7 @@ module.exports.deleteBannerController = async (req, res) => {
       });
     } else {
       if (banner) {
+        console.log(banner);
         await deleteBanner(banner["metaname"], res).then((value) => {
           if (value == "deleted") {
             Banner.findByIdAndDelete(banner_id, (err, banner) => {
@@ -142,6 +144,11 @@ module.exports.deleteBannerController = async (req, res) => {
             });
           }
         });
+      } else {
+        return res.status(400).json({
+          status: "error",
+          error: "Banner not found"
+        })
       }
     }
   });
