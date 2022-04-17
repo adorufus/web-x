@@ -2,12 +2,15 @@ require("./config/config");
 require("./models/db");
 require("./middlewares/passport");
 
+const fs = require('fs')
 const express = require("express");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const routers = require("./routes/index");
 const cors = require("cors");
 const app = express();
+const http = require('http')
+const https = require('https')
 const PORT = process.env.PORT;
 const { initializeApp, cert } = require("firebase-admin/app");
 const serviceAccount = require("../service.json");
@@ -39,6 +42,14 @@ app.get("/", (req, res, nxt) => {
 
 app.use("/api/v1", [routers.authRoute, routers.bannerRoute, routers.newsRoute]);
 
-app.listen(PORT, () => {
-  console.log("app running in port: " + PORT);
-});
+const options = {
+  key: fs.readFileSync('../key.pem'),
+  cert: fs.readFileSync('../cert.pem')
+}
+
+// app.listen(PORT, () => {
+//   console.log("app running in port: " + PORT);
+// });
+
+// http.createServer(app).listen(8000);
+https.createServer(options, app).listen(8000);
