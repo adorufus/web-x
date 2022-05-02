@@ -43,8 +43,8 @@ app.get("/", (req, res, nxt) => {
 app.use("/api/v1", [routers.authRoute, routers.bannerRoute, routers.newsRoute]);
 
 const options = {
-  key: fs.readFileSync('../key.pem'),
-  cert: fs.readFileSync('../cert.pem')
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem')
 }
 
 // app.listen(PORT, () => {
