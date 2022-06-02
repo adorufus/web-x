@@ -7,11 +7,11 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const routers = require("./routes/index");
-const cors = require("cors");
+// const cors = require("cors");
 const app = express();
 const http = require('http')
 const https = require('https')
-const PORT = process.env.PORT;
+const PORT = 8000;
 const { initializeApp, cert } = require("firebase-admin/app");
 const serviceAccount = require("../service.json");
 const cloudinary = require("cloudinary");
@@ -27,7 +27,7 @@ initializeApp({
   storageBucket: "webx-1500b.appspot.com",
 });
 
-app.use(cors());
+// app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(passport.initialize());
@@ -47,9 +47,9 @@ const options = {
   cert: fs.readFileSync('cert.pem')
 }
 
-// app.listen(PORT, () => {
-//   console.log("app running in port: " + PORT);
-// });
+app.listen(PORT, () => {
+  console.log("app running in port: " + PORT);
+});
 
 // http.createServer(app).listen(8000);
-https.createServer(options, app).listen(8000);
+// https.createServer(options, app).listen(8000);
