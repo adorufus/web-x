@@ -47,9 +47,9 @@ const options = {
   cert: fs.readFileSync('cert.pem')
 }
 
-// app.listen(PORT, () => {
-//   console.log("app running in port: " + PORT);
-// });
+app.listen(PORT, () => {
+  console.log("app running in port: " + PORT);
+});
 
 // http.createServer(app).listen(8000);
-https.createServer(options, app).listen(8000);
+// https.createServer(options, app).listen(8000);
