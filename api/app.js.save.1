@@ -1,4 +1,3 @@
-
 require("./config/config");
 require("./models/db");
 require("./middlewares/passport");
@@ -28,11 +27,11 @@ initializeApp({
   storageBucket: "webx-1500b.appspot.com",
 });
 
-var allowedOrigins = ["http://localhost:4200", "https://artemizpro.com"];
+var allowedOrigins = "https://artemizpro.com";
 
 app.use(
   cors({
-    origin: "https://artemizpro.com",
+    origin: allowedOrigins,
     allowedHeaders: ["Content-Type", "Authorization"],
     methods: ["GET", "POST", "OPTIONS", "PUT", "DELETE"]
   })
