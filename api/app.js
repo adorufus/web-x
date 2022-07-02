@@ -52,13 +52,14 @@ app.get("/", (req, res, nxt) => {
 app.use("/api/v1", [routers.authRoute, routers.bannerRoute, routers.newsRoute]);
 
 const options = {
-  key: fs.readFileSync("key.pem"),
-  cert: fs.readFileSync("cert.pem"),
+  ca: fs.readFileSync("ca_bundle.crt"),
+  key: fs.readFileSync("private.key"),
+  cert: fs.readFileSync("certificate.crt"),
 };
 
-app.listen(PORT, () => {
-  console.log("app running in port: " + PORT);
-});
+// app.listen(PORT, () => {
+//   console.log("app running in port: " + PORT);
+// });
 
 // http.createServer(app).listen(8000);
-// https.createServer(options, app).listen(8000);
+https.createServer(options, app).listen(8080);
