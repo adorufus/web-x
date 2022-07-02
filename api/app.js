@@ -2,15 +2,15 @@ require("./config/config");
 require("./models/db");
 require("./middlewares/passport");
 
-const fs = require('fs')
+const fs = require("fs");
 const express = require("express");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const routers = require("./routes/index");
 const cors = require("cors");
 const app = express();
-const http = require('http')
-const https = require('https')
+const http = require("http");
+const https = require("https");
 const PORT = 8080;
 const { initializeApp, cert } = require("firebase-admin/app");
 const serviceAccount = require("../service.json");
@@ -27,7 +27,13 @@ initializeApp({
   storageBucket: "webx-1500b.appspot.com",
 });
 
-app.use(cors());
+var allowedOrigins = ["http://localhost:4200", "https://artemizpro.com"];
+
+app.use(
+  cors({
+    origin: "http://localhost:4200"
+  })
+);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(passport.initialize());
@@ -43,9 +49,9 @@ app.get("/", (req, res, nxt) => {
 app.use("/api/v1", [routers.authRoute, routers.bannerRoute, routers.newsRoute]);
 
 const options = {
-  key: fs.readFileSync('key.pem'),
-  cert: fs.readFileSync('cert.pem')
-}
+  key: fs.readFileSync("key.pem"),
+  cert: fs.readFileSync("cert.pem"),
+};
 
 app.listen(PORT, () => {
   console.log("app running in port: " + PORT);
