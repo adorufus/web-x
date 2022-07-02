@@ -1,0 +1,31 @@
+var express = require('express');
+var router = express.Router();
+var middlewares = require("../middlewares/index");
+var portfolioController = require('../controllers/portfolioController.js');
+
+/*
+ * GET
+ */
+router.get('/portfolio/all', portfolioController.list);
+
+/*
+ * GET
+ */
+router.get('/portfolio/:id', portfolioController.show);
+
+/*
+ * POST
+ */
+router.post('/portfolio/add', [middlewares.verifyJwt.verifyToken, filesUpload.single("image_file")], portfolioController.create);
+
+/*
+ * PUT
+ */
+router.put('/portfolio/edit/:id', [middlewares.verifyJwt.verifyToken, filesUpload.single("image_file")], portfolioController.update);
+
+/*
+ * DELETE
+ */
+router.delete('/portfolio/delete/:id', [middlewares.verifyJwt.verifyToken], portfolioController.remove);
+
+module.exports = router;
