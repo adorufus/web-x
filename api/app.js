@@ -32,7 +32,7 @@ var allowedOrigins = ["http://localhost:4200", "https://artemizpro.com"];
 
 app.use(
   cors({
-    origin: "https://artemizpro.com",
+    origin: "*",
     allowedHeaders: ["Content-Type", "Authorization"],
     methods: ["GET", "POST", "OPTIONS", "PUT", "DELETE"]
   })
