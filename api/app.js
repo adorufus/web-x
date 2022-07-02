@@ -31,7 +31,9 @@ var allowedOrigins = ["http://localhost:4200", "https://artemizpro.com"];
 
 app.use(
   cors({
-    origin: "http://localhost:4200"
+    origin: allowedOrigins,
+    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: ["GET", "POST", "OPTIONS", "PUT", "DELETE"]
   })
 );
 app.use(bodyParser.urlencoded({ extended: false }));
