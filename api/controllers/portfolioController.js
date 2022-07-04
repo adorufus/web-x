@@ -1,4 +1,7 @@
-var PortfolioModel = require('../models/portfolioModel.js');
+var PortfolioModel = require("../models/portfolioModel.js");
+var PortfolioCategoryModel = require("../models/portfolioCategoryModel.js");
+const _ = require("lodash");
+const uploadImage = require("../utils/imageUploader");
 
 /**
  * portfolioController.js
@@ -6,119 +9,190 @@ var PortfolioModel = require('../models/portfolioModel.js');
  * @description :: Server-side logic for managing portfolios.
  */
 module.exports = {
-
-    /**
-     * portfolioController.list()
-     */
-    list: function (req, res) {
-        PortfolioModel.find(function (err, portfolios) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when getting portfolio.',
-                    error: err
-                });
-            }
-
-            return res.json(portfolios);
+  /**
+   * portfolioController.list()
+   */
+  list: function (req, res) {
+    PortfolioModel.find(function (err, portfolios) {
+      if (err) {
+        return res.status(500).json({
+          message: "Error when getting portfolio.",
+          error: err,
         });
-    },
+      }
 
-    /**
-     * portfolioController.show()
-     */
-    show: function (req, res) {
-        var id = req.params.id;
+      return res.json(portfolios);
+    });
+  },
 
-        PortfolioModel.findOne({_id: id}, function (err, portfolio) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when getting portfolio.',
-                    error: err
-                });
-            }
-
-            if (!portfolio) {
-                return res.status(404).json({
-                    message: 'No such portfolio'
-                });
-            }
-
-            return res.json(portfolio);
+  category: function (req, res) {
+    var id = req.params.id;
+    PortfolioCategoryModel.findOne({ _id: id }, function (err, category) {
+      if (err) {
+        return res.status(500).json({
+          message: "Error when getting category",
+          error: err,
         });
-    },
+      }
 
-    /**
-     * portfolioController.create()
-     */
-    create: function (req, res) {
-        var portfolio = new PortfolioModel({
-			title : req.body.title,
-			image : req.body.image
+      if (!portfolio) {
+        return res.status(404).json({
+          message: "No such portfolio",
         });
+      }
 
-        portfolio.save(function (err, portfolio) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when creating portfolio',
-                    error: err
-                });
-            }
+      return res.status(200).json({
+        message: "success",
+        data: category,
+      });
+    });
+  },
 
-            return res.status(201).json(portfolio);
+  allCategory: function (req, res) {
+    PortfolioCategoryModel.find(function (err, categories) {
+      if (err) {
+        return res.status(500).json({
+          message: "Error when getting portfolio.",
+          error: err,
         });
-    },
+      }
 
-    /**
-     * portfolioController.update()
-     */
-    update: function (req, res) {
-        var id = req.params.id;
+      return res.status(200).json({
+        message: "success",
+        data: categories,
+      });
+    });
+  },
 
-        PortfolioModel.findOne({_id: id}, function (err, portfolio) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when getting portfolio',
-                    error: err
-                });
-            }
+  createCategory: async function (req, res) {
+    const name = req.body;
 
-            if (!portfolio) {
-                return res.status(404).json({
-                    message: 'No such portfolio'
-                });
-            }
+    var category = new PortfolioCategoryModel();
 
-            portfolio.title = req.body.title ? req.body.title : portfolio.title;
-			portfolio.image = req.body.image ? req.body.image : portfolio.image;
-			
-            portfolio.save(function (err, portfolio) {
-                if (err) {
-                    return res.status(500).json({
-                        message: 'Error when updating portfolio.',
-                        error: err
-                    });
-                }
+    await uploadImage(req.file)
+      .then((value) => {
+        console.log(value);
+        category.metaname = value["public_id"];
+        category.category_image_file = value["secure_url"];
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
-                return res.json(portfolio);
-            });
+    category.category_name = name;
+
+    category.save(async function (err, doc) {
+      if (err) {
+        console.log(err);
+        return res.status(400).json({
+          status: "error",
+          error: err,
         });
-    },
-
-    /**
-     * portfolioController.remove()
-     */
-    remove: function (req, res) {
-        var id = req.params.id;
-
-        PortfolioModel.findByIdAndRemove(id, function (err, portfolio) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when deleting the portfolio.',
-                    error: err
-                });
-            }
-
-            return res.status(204).json();
+      } else {
+        return res.status(201).json({
+          status: "success",
+          message: "Category created",
         });
-    }
+      }
+    });
+  },
+
+  /**
+   * portfolioController.show()
+   */
+  show: function (req, res) {
+    var id = req.params.id;
+
+    PortfolioModel.findOne({ _id: id }, function (err, portfolio) {
+      if (err) {
+        return res.status(500).json({
+          message: "Error when getting portfolio.",
+          error: err,
+        });
+      }
+
+      if (!portfolio) {
+        return res.status(404).json({
+          message: "No such portfolio",
+        });
+      }
+
+      return res.json(portfolio);
+    });
+  },
+
+  /**
+   * portfolioController.create()
+   */
+  create: function (req, res) {
+    var portfolio = new PortfolioModel({
+      title: req.body.title,
+      image: req.body.image,
+    });
+
+    portfolio.save(function (err, portfolio) {
+      if (err) {
+        return res.status(500).json({
+          message: "Error when creating portfolio",
+          error: err,
+        });
+      }
+
+      return res.status(201).json(portfolio);
+    });
+  },
+
+  /**
+   * portfolioController.update()
+   */
+  update: function (req, res) {
+    var id = req.params.id;
+
+    PortfolioModel.findOne({ _id: id }, function (err, portfolio) {
+      if (err) {
+        return res.status(500).json({
+          message: "Error when getting portfolio",
+          error: err,
+        });
+      }
+
+      if (!portfolio) {
+        return res.status(404).json({
+          message: "No such portfolio",
+        });
+      }
+
+      portfolio.title = req.body.title ? req.body.title : portfolio.title;
+      portfolio.image = req.body.image ? req.body.image : portfolio.image;
+
+      portfolio.save(function (err, portfolio) {
+        if (err) {
+          return res.status(500).json({
+            message: "Error when updating portfolio.",
+            error: err,
+          });
+        }
+
+        return res.json(portfolio);
+      });
+    });
+  },
+
+  /**
+   * portfolioController.remove()
+   */
+  remove: function (req, res) {
+    var id = req.params.id;
+
+    PortfolioModel.findByIdAndRemove(id, function (err, portfolio) {
+      if (err) {
+        return res.status(500).json({
+          message: "Error when deleting the portfolio.",
+          error: err,
+        });
+      }
+
+      return res.status(204).json();
+    });
+  },
 };

@@ -13,15 +13,25 @@ router.get('/portfolio/all', portfolioController.list);
  */
 router.get('/portfolio/:id', portfolioController.show);
 
+router.get('/portfolio/category/:id', portfolioController.category);
+
+router.get('/portfolio/category/all', portfolioController.allCategory);
+
+router.post('/portfolio/category/create', [middlewares.verifyJwt.verifyToken, middlewares.filesUpload.single("image_file")], portfolioController.createCategory);
+
+// router.put('/portfolio/category/edit/:id', portfolioController.editCategory);
+
+// router.delete('/portfolio/category/delete/:id', portfolioController.deleteCategory);
+
 /*
  * POST
  */
-router.post('/portfolio/add', [middlewares.verifyJwt.verifyToken, filesUpload.single("image_file")], portfolioController.create);
+router.post('/portfolio/add', [middlewares.verifyJwt.verifyToken, middlewares.filesUpload.single("image_file")], portfolioController.create);
 
 /*
  * PUT
  */
-router.put('/portfolio/edit/:id', [middlewares.verifyJwt.verifyToken, filesUpload.single("image_file")], portfolioController.update);
+router.put('/portfolio/edit/:id', [middlewares.verifyJwt.verifyToken, middlewares.filesUpload.single("image_file")], portfolioController.update);
 
 /*
  * DELETE

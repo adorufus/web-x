@@ -37,7 +37,7 @@ app.use(
     // methods: ["GET", "POST", "OPTIONS", "PUT", "DELETE"]
   })
 );
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(passport.initialize());
 
@@ -49,7 +49,7 @@ app.get("/", (req, res, nxt) => {
   nxt();
 });
 
-app.use("/api/v1", [routers.authRoute, routers.bannerRoute, routers.newsRoute]);
+app.use("/api/v1", [routers.authRoute, routers.bannerRoute, routers.newsRoute,  routers.portfolioRoute]);
 
 const options = {
   ca: fs.readFileSync("ca_bundle.crt"),
