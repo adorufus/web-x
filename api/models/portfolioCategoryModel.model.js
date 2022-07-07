@@ -1,7 +1,6 @@
 var mongoose = require("mongoose");
-var Schema = mongoose.Schema;
 
-var portfolioCategorySchema = new Schema({
+var portfolioCategorySchema = new mongoose.Schema({
   category_name: {
     type: String,
     required: true,
@@ -17,4 +16,4 @@ var portfolioCategorySchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("portfolioCategory", portfolioCategorySchema);
+mongoose.model("portfolioCategory", portfolioCategorySchema);

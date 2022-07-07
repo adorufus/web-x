@@ -1,7 +1,9 @@
 var PortfolioModel = require("../models/portfolioModel.js");
-var PortfolioCategoryModel = require("../models/portfolioCategoryModel.js");
 const _ = require("lodash");
+const mongoose = require("mongoose");
 const uploadImage = require("../utils/imageUploader");
+
+var PortfolioCategoryModel = mongoose.model('portfolioCategory')
 
 /**
  * portfolioController.js
@@ -26,7 +28,7 @@ module.exports = {
   },
 
   category: function (req, res) {
-    var id = req.params.id;
+    var id = req.query.id;
     PortfolioCategoryModel.findOne({ _id: id }, function (err, category) {
       if (err) {
         return res.status(500).json({
@@ -35,9 +37,9 @@ module.exports = {
         });
       }
 
-      if (!portfolio) {
+      if (!category) {
         return res.status(404).json({
-          message: "No such portfolio",
+          message: "No such category",
         });
       }
 
@@ -65,7 +67,7 @@ module.exports = {
   },
 
   createCategory: async function (req, res) {
-    const name = req.body;
+    const {category_name} = req.body;
 
     var category = new PortfolioCategoryModel();
 
@@ -79,7 +81,7 @@ module.exports = {
         console.log(err);
       });
 
-    category.category_name = name;
+    category.category_name = category_name;
 
     category.save(async function (err, doc) {
       if (err) {
@@ -94,6 +96,31 @@ module.exports = {
           message: "Category created",
         });
       }
+    });
+  },
+
+  deleteCategory: async function (req, res) {
+    var id = req.query.id;
+
+    PortfolioCategoryModel.findByIdAndRemove(id, function (err, category) {
+      if (err) {
+        return res.status(500).json({
+          message: "Error when deleting the news.",
+          error: err,
+        });
+      }
+
+      if(!category) {
+        return res.status(404).json({
+          status: "error",
+          message: "Category not found"
+        })
+      }
+
+      return res.status(200).json({
+        status: "success",
+        message: "Category Deleted"
+      });
     });
   },
 

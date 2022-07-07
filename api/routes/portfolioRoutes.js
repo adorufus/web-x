@@ -11,9 +11,9 @@ router.get('/portfolio/all', portfolioController.list);
 /*
  * GET
  */
-router.get('/portfolio/:id', portfolioController.show);
+router.get('/portfolio', portfolioController.show);
 
-router.get('/portfolio/category/:id', portfolioController.category);
+router.get('/portfolio/category', portfolioController.category);
 
 router.get('/portfolio/category/all', portfolioController.allCategory);
 
@@ -21,7 +21,7 @@ router.post('/portfolio/category/create', [middlewares.verifyJwt.verifyToken, mi
 
 // router.put('/portfolio/category/edit/:id', portfolioController.editCategory);
 
-// router.delete('/portfolio/category/delete/:id', portfolioController.deleteCategory);
+router.delete('/portfolio/category/delete', portfolioController.deleteCategory);
 
 /*
  * POST
