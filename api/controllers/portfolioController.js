@@ -155,6 +155,7 @@ module.exports = {
     var portfolio = new PortfolioModel({
       title: req.body.title,
       image: req.body.image,
+      tier: req.body.tier
     });
 
     portfolio.save(function (err, portfolio) {
