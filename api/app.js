@@ -17,6 +17,9 @@ const { initializeApp, cert } = require("firebase-admin/app");
 const serviceAccount = require("../service.json");
 const cloudinary = require("cloudinary");
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 cloudinary.config({
   cloud_name: "webx-cloud-image",
   api_key: process.env.CLOUDINARY_KEY,
@@ -37,8 +40,7 @@ app.use(
     // methods: ["GET", "POST", "OPTIONS", "PUT", "DELETE"]
   })
 );
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+
 app.use(passport.initialize());
 
 app.get("/", (req, res, nxt) => {

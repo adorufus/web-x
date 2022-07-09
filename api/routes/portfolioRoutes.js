@@ -13,20 +13,20 @@ router.get('/portfolio/all', portfolioController.list);
  */
 router.get('/portfolio', portfolioController.show);
 
-router.get('/portfolio/category', portfolioController.category);
+router.get('/portfolio/category', portfolioController.getCategory);
 
 router.get('/portfolio/category/all', portfolioController.allCategory);
 
 router.post('/portfolio/category/create', [middlewares.verifyJwt.verifyToken, middlewares.filesUpload.single("image_file")], portfolioController.createCategory);
 
-// router.put('/portfolio/category/edit/:id', portfolioController.editCategory);
+router.put('/portfolio/category/edit', [middlewares.verifyJwt.verifyToken, middlewares.filesUpload.single("image_file")], portfolioController.updateCategory);
 
 router.delete('/portfolio/category/delete', portfolioController.deleteCategory);
 
 /*
  * POST
  */
-router.post('/portfolio/add', [middlewares.verifyJwt.verifyToken, middlewares.filesUpload.single("image_file")], portfolioController.create);
+router.post('/portfolio/create', [middlewares.verifyJwt.verifyToken], portfolioController.create);
 
 /*
  * PUT
@@ -37,5 +37,17 @@ router.put('/portfolio/edit/:id', [middlewares.verifyJwt.verifyToken, middleware
  * DELETE
  */
 router.delete('/portfolio/delete/:id', [middlewares.verifyJwt.verifyToken], portfolioController.remove);
+
+router.get('/portfolio/tier/all', portfolioController.getAllTier);
+
+router.get('/portfolio/tier/all-by-portfolio', portfolioController.getAllTierByPortfolio);
+
+router.get('/portfolio/tier', portfolioController.getTier);
+
+router.post('/portfolio/tier/create', [middlewares.verifyJwt.verifyToken, middlewares.filesUpload.array("images", 6)], portfolioController.createTier);
+
+// router.put('/portfolio/tier/update', [middlewares.verifyJwt.verifyToken, middlewares.filesUpload.array("images", 6)], portfolioController.updateTier);
+
+// router.delete('/portfolio/tier/delete', [middlewares.verifyJwt.verifyToken], portfolioController.deleteTier);
 
 module.exports = router;

@@ -10,3 +10,4 @@ mongoose.connect(process.env.MONGO_URL, (err) => {
 require('./user.model')
 require('./banner.model')
 require('./portfolioCategoryModel.model')
+require('./portfolioModel')

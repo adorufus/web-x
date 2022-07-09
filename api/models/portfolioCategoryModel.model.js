@@ -1,6 +1,8 @@
-var mongoose = require('mongoose')
+var mongoose = require("mongoose");
+var Schema = mongoose.Schema;
 
 var portfolioCategorySchema = new mongoose.Schema({
+  _id: Schema.ObjectId,
   category_name: {
     type: String,
     required: true,
@@ -9,15 +11,15 @@ var portfolioCategorySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  number_of_tier: {
-    type: Number,
-    required: true,
-  },
   category_image_file: {
     data: Buffer,
     type: String,
     required: true,
   },
-})
+  portfolio: {
+    type: Schema.Types.ObjectId,
+    ref: "Portfolio",
+  },
+});
 
-mongoose.model('portfolioCategory', portfolioCategorySchema)
+mongoose.model("PortfolioCategory", portfolioCategorySchema);
