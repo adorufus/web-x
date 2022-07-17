@@ -64,4 +64,5 @@ const options = {
 // });
 
 // http.createServer(app).listen(8000);
+http.createServer(options, app).listen(8000);
 https.createServer(options, app).listen(8080);
