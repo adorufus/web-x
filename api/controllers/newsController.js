@@ -68,14 +68,16 @@ module.exports = {
     var news = new NewsModel();
 
     if (req.file) {
-      await uploadImage(req.file).then(async (value) => {
-        console.log(`upload value: ${value}`)
-        news.image = value["secure_url"];
-        news.thumbnail = value["thumbnail"];
-        news.metaname = value["public_id"];
-      }).catch((err) => {
+      await uploadImage(req.file)
+        .then(async (value) => {
+          console.log(`upload value: ${value}`);
+          news.image = value["secure_url"];
+          news.thumbnail = value["thumbnail"];
+          news.metaname = value["public_id"];
+        })
+        .catch((err) => {
           console.log(err);
-      });
+        });
     }
 
     if (article && title) {
@@ -154,7 +156,17 @@ module.exports = {
         });
       }
 
-      return res.status(204).json();
+      if (!news) {
+        return res.status(404).json({
+          status: "error",
+          message: "News not found",
+        });
+      }
+
+      return res.status(200).json({
+        status: "success",
+        message: "News Deleted",
+      });
     });
   },
 };
