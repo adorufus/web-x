@@ -36,9 +36,9 @@ var tierSchema = new Schema({
       required: true,
     },
   ],
-  portfolio_id: {
+  category_id: {
     type: Schema.Types.ObjectId,
-    ref: "Portfolio",
+    ref: "PortfolioCategory",
   },
   tier_description: {
     type: String,

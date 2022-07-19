@@ -36,7 +36,7 @@ router.put('/portfolio/edit/:id', [middlewares.verifyJwt.verifyToken, middleware
 /*
  * DELETE
  */
-router.delete('/portfolio/delete/:id', [middlewares.verifyJwt.verifyToken], portfolioController.remove);
+router.delete('/portfolio/delete', [middlewares.verifyJwt.verifyToken], portfolioController.remove);
 
 router.get('/portfolio/tier/all', portfolioController.getAllTier);
 

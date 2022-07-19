@@ -16,10 +16,12 @@ var portfolioCategorySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  portfolio: {
-    type: Schema.Types.ObjectId,
-    ref: "Portfolio",
-  },
+  tier_list: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Tier",
+    },
+  ],
 });
 
 mongoose.model("PortfolioCategory", portfolioCategorySchema);

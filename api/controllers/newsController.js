@@ -144,7 +144,7 @@ module.exports = {
    * newsController.remove()
    */
   remove: function (req, res) {
-    var id = req.params.id;
+    var id = req.query.id;
 
     NewsModel.findByIdAndRemove(id, function (err, news) {
       if (err) {
@@ -154,7 +154,12 @@ module.exports = {
         });
       }
 
-      return res.status(204).json();
+      return res.status(204).json(
+        {
+          "status": "success",
+          message: "Delete completed"
+        }
+      );
     });
   },
 };

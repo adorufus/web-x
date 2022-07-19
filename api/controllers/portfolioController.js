@@ -32,7 +32,7 @@ module.exports = {
     var id = req.query.id;
 
     await PortfolioCategoryModel.findOne({ _id: id })
-      .populate("portfolio")
+      .populate("tier_list")
       .exec(function (err, category) {
         if (err) {
           return res.status(500).json({
@@ -261,28 +261,32 @@ module.exports = {
   createTier: async function (req, res) {
     var files = req.files;
 
-    var { portfolioId, tier_name, youtube_url, tier_description } = req.body;
+    var { categoryId, tier_name, youtube_url, tier_description } = req.body;
 
     var tier = new TierModel();
 
-    tier.portfolio_id = portfolioId;
+    tier.category_id = categoryId;
     tier.tier_name = tier_name;
     tier.tier_description = tier_description;
     tier.youtube_url = youtube_url;
 
     for (const file of files) {
+      console.log("uploading")
       await uploadImage(file)
-        .then((value) => {
+        .then(async (value) => {
           console.log(value);
           tier.metanames.push(value["public_id"]);
+          console.log("sukses")
           tier.tier_portofolio_images.push(value["secure_url"]);
+          console.log("sukses")
+
         })
         .catch((err) => {
           console.log(err);
         });
     }
 
-    PortfolioModel.findOne({ _id: portfolioId }, (err, portfolio) => {
+    PortfolioCategoryModel.findOne({ _id: categoryId }, (err, portfolio) => {
       if (err) {
         return res.status(400).json({
           status: "failure",
@@ -434,7 +438,7 @@ module.exports = {
    * portfolioController.remove()
    */
   remove: function (req, res) {
-    var id = req.params.id;
+    var id = req.query.id;
 
     PortfolioModel.findByIdAndRemove(id, function (err, portfolio) {
       if (err) {
@@ -444,7 +448,10 @@ module.exports = {
         });
       }
 
-      return res.status(204).json();
+      return res.status(204).json({
+        status: "Success",
+        message: "Delete successfull"
+      });
     });
   },
 };
