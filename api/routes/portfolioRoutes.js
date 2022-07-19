@@ -48,6 +48,6 @@ router.post('/portfolio/tier/create', [middlewares.verifyJwt.verifyToken, middle
 
 // router.put('/portfolio/tier/update', [middlewares.verifyJwt.verifyToken, middlewares.filesUpload.array("images", 6)], portfolioController.updateTier);
 
-// router.delete('/portfolio/tier/delete', [middlewares.verifyJwt.verifyToken], portfolioController.deleteTier);
+router.delete('/portfolio/tier/delete', [middlewares.verifyJwt.verifyToken], portfolioController.deleteTier);
 
 module.exports = router;

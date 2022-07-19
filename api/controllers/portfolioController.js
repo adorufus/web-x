@@ -174,9 +174,43 @@ module.exports = {
         });
       }
 
+      TierModel.findByIdAndRemove(category.tier_list, function (err2, tier) {
+        if (err2) {
+          return res.status(500).json({
+            message: "Error when deleting the news.",
+            error: err,
+          });
+        }
+
+        if (!tier) {
+          return res.status(404).json({
+            status: "error",
+            message: "Category not found",
+          });
+        }
+
+        return res.status(200).json({
+          status: "success",
+          message: "Category Deleted",
+        });
+      });
+    });
+  },
+
+  deleteTier: async function (req, res) {
+    var id = req.query.id;
+
+    TierModel.findByIdAndRemove(id, function (err, tier) {
+      if (err) {
+        return res.status(500).json({
+          message: "Error when deleting the portfolio.",
+          error: err,
+        });
+      }
+
       return res.status(200).json({
-        status: "success",
-        message: "Category Deleted",
+        status: "Success",
+        message: "Delete successfull",
       });
     });
   },
@@ -271,15 +305,14 @@ module.exports = {
     tier.youtube_url = youtube_url;
 
     for (const file of files) {
-      console.log("uploading")
+      console.log("uploading");
       await uploadImage(file)
         .then(async (value) => {
           console.log(value);
           tier.metanames.push(value["public_id"]);
-          console.log("sukses")
+          console.log("sukses");
           tier.tier_portofolio_images.push(value["secure_url"]);
-          console.log("sukses")
-
+          console.log("sukses");
         })
         .catch((err) => {
           console.log(err);
@@ -450,7 +483,7 @@ module.exports = {
 
       return res.status(204).json({
         status: "Success",
-        message: "Delete successfull"
+        message: "Delete successfull",
       });
     });
   },
