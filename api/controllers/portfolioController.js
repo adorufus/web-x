@@ -211,7 +211,7 @@ module.exports = {
   getAllTierByPortfolio: function (req, res) {
     var portfolioId = req.query.portfolioId;
 
-    TierModel.find({ portfolio_id: portfolioId }, (err, tiers) => {
+    TierModel.find({ category_id: portfolioId }, (err, tiers) => {
       if (err) {
         return res.status(400).json({
           status: "failure",
