@@ -1,7 +1,7 @@
 const e = require("express");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
-const _ = require("lodash");
+const lodash = require("lodash");
 
 var User = mongoose.model("User");
 
@@ -19,7 +19,7 @@ module.exports.getUser = function getUserDetails(req, res) {
         return res.status(200).json({
           status: "success",
           message: "User detail found",
-          data: _.pick(user, ["_id", "fullName", "email", "username", "role"]),
+          data: lodash.pick(user, ["_id", "fullName", "email", "username", "role"]),
         });
     });
   } else {
@@ -33,7 +33,7 @@ module.exports.getUser = function getUserDetails(req, res) {
         return res.status(200).json({
           status: "success",
           message: "User detail found",
-          data: _.pick(user, ["_id", "fullName", "email", "username", "role"]),
+          data: lodash.pick(user, ["_id", "fullName", "email", "username", "role"]),
         });
     });
   }
@@ -45,8 +45,8 @@ module.exports.getAllUser = function (req, res) {
       res.status(200).json({
         status: "success",
         message: "All user data found",
-        data: _.chain(users).map((user) =>
-          _.pick(user, ["_id", "fullName", "email", "username", "role"])
+        data: lodash.chain(users).map((user) =>
+          lodash.pick(user, ["_id", "fullName", "email", "username", "role"])
         ),
       });
     } else {

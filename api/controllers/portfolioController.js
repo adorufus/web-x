@@ -1,4 +1,4 @@
-const _ = require("lodash");
+const lodash = require("lodash");
 const mongoose = require("mongoose");
 const uploadImage = require("../utils/imageUploader");
 
