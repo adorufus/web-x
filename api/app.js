@@ -20,6 +20,8 @@ const cloudinary = require("cloudinary");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+app.use('/images', express.static('public/uploaded_images'))
+
 cloudinary.config({
   cloud_name: "webx-cloud-image",
   api_key: process.env.CLOUDINARY_KEY,
@@ -51,7 +53,7 @@ app.get("/", (req, res, nxt) => {
   nxt();
 });
 
-app.use("/api/v1", [routers.authRoute, routers.bannerRoute, routers.newsRoute,  routers.portfolioRoute]);
+app.use("/api/v1", [routers.authRoute, routers.bannerRoute, routers.newsRoute,  routers.portfolioRoute, routers.generalSettingsRoute]);
 
 const options = {
   ca: fs.readFileSync("ca_bundle.crt"),
