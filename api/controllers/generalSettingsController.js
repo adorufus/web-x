@@ -80,6 +80,7 @@ module.exports = {
      */
     update: function (req, res) {
         var id = req.query.id;
+        var file = req.file
 
         GeneralsettingsModel.findOne({_id: id}, function (err, generalSettings) {
             if (err) {
@@ -100,7 +101,7 @@ module.exports = {
 			generalSettings.about_us_mini = req.body.about_us_mini ? req.body.about_us_mini : generalSettings.about_us_mini;
 			generalSettings.company_email = req.body.company_email ? req.body.company_email : generalSettings.company_email;
 			generalSettings.company_phone = req.body.company_phone ? req.body.company_phone : generalSettings.company_phone;
-			generalSettings.jumbotron_image = req.body.jumbotron_image ? req.body.jumbotron_image : generalSettings.jumbotron_image;
+			generalSettings.jumbotron_image = file ? 'https://103.163.139.152:8080/images/' + file.filename : generalSettings.jumbotron_image;
 			
             generalSettings.save(function (err, generalSettings) {
                 if (err) {
