@@ -60,7 +60,7 @@ module.exports = {
             about_us_mini: req.body.about_us_mini,
 			company_email : req.body.company_email,
 			company_phone : req.body.company_phone,
-			jumbotron_image : 'http://localhost:8000/images/' + file.filename
+			jumbotron_image : 'https://103.163.139.152:8080/images/' + file.filename
         });
 
         generalSettings.save(function (err, generalSettings) {
