@@ -29,7 +29,7 @@ module.exports = {
     show: function (req, res) {
         var id = req.params.id;
 
-        GeneralsettingsModel.findOne({_id: id}, function (err, generalSettings) {
+        GeneralsettingsModel.find(function (err, generalSettings) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting generalSettings.',
@@ -43,7 +43,13 @@ module.exports = {
                 });
             }
 
-            return res.json(generalSettings);
+            return res.status(200).json(
+                {
+                    status: "success",
+                    message: "settings found!",
+                    data: generalSettings[0]
+                }
+            );
         });
     },
 
