@@ -69,7 +69,9 @@ module.exports.editBanner = async (req, res) => {
             {
               bannerName: banner_name ? banner_name : banner.bannerName,
               url: go_to_url ? go_to_url : banner.url,
-              bannerFile: file ? baseFileUrl + file.filename : banner.bannerFile,
+              bannerFile: file
+                ? baseFileUrl + file.filename
+                : banner.bannerFile,
             },
             (err, data) => {
               if (err) {
@@ -116,25 +118,16 @@ module.exports.deleteBannerController = async (req, res) => {
     } else {
       if (banner) {
         console.log(banner)
-        await deleteBanner(banner['metaname'], res).then((value) => {
-          if (value == 'deleted') {
-            Banner.findByIdAndDelete(banner_id, (err, banner) => {
-              if (err) {
-                return res.status(400).json({
-                  status: 'failed',
-                  error: err,
-                })
-              } else {
-                return res.status(200).json({
-                  status: 'success',
-                  message: 'Image deleted.',
-                })
-              }
+        Banner.findByIdAndDelete(banner_id, (err, banner) => {
+          if (err) {
+            return res.status(400).json({
+              status: 'failed',
+              error: err,
             })
           } else {
-            return res.status(400).json({
-              status: 'error',
-              error: 'Banner not found',
+            return res.status(200).json({
+              status: 'success',
+              message: 'Image deleted.',
             })
           }
         })
