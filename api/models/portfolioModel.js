@@ -23,13 +23,7 @@ var tierSchema = new Schema({
     type: String,
     required: true,
   },
-  metanames: [
-    {
-      type: String,
-      required: true,
-    },
-  ],
-  tier_portofolio_images: [
+  tier_portofolio_files: [
     {
       data: Buffer,
       type: String,

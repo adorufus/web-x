@@ -12,7 +12,6 @@ var newsSchema = new Schema({
     required: true,
   },
   thumbnail: String,
-  metaname: String,
 });
 
 module.exports = mongoose.model("news", newsSchema);

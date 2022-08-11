@@ -44,7 +44,7 @@ router.get('/portfolio/tier/all-by-portfolio', portfolioController.getAllTierByP
 
 router.get('/portfolio/tier', portfolioController.getTier);
 
-router.post('/portfolio/tier/create', [middlewares.verifyJwt.verifyToken, middlewares.filesUpload.array("images", 6)], portfolioController.createTier);
+router.post('/portfolio/tier/create', [middlewares.verifyJwt.verifyToken, middlewares.filesUpload.array("files", 6)], portfolioController.createTier);
 
 // router.put('/portfolio/tier/update', [middlewares.verifyJwt.verifyToken, middlewares.filesUpload.array("images", 6)], portfolioController.updateTier);
 

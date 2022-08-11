@@ -7,10 +7,6 @@ var portfolioCategorySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  metaname: {
-    type: String,
-    required: true,
-  },
   category_image_file: {
     data: Buffer,
     type: String,
