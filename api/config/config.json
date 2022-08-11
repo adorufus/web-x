@@ -1,7 +1,7 @@
 {
     "development": {
         "PORT": 8000,
-        "MONGO_URL": "mongodb+srv://reingalrt:Kuatcore141@cluster0.fwdli.mongodb.net/webx?retryWrites=true&w=majority",
+        "MONGO_URL": "mongodb+srv://reingalrt:Kuatcore141@cluster0.fwdli.mongodb.net/webx?retryWrites=true&w=majority&ssl=true",
         "JWT_SECRET": "secretbangetnih123",
         "JWT_EXP": "50000h",
         "IMAGE_KIT_PUBLIC": "public_N2OiSL6jwg7vzhsVhsdoYjUiKbQ=",
@@ -11,7 +11,7 @@
     },
     "production": {
         "PORT": 80,
-        "MONGO_URL": "mongodb+srv://reingalrt:Kuatcore141@cluster0.fwdli.mongodb.net/webx?retryWrites=true&w=majority",
+        "MONGO_URL": "mongodb+srv://reingalrt:Kuatcore141@cluster0.fwdli.mongodb.net/webx?retryWrites=true&w=majority&ssl=true",
         "JWT_SECRET": "secretbangetnih123",
         "JWT_EXP": "50000h",
         "IMAGE_KIT_PUBLIC": "public_N2OiSL6jwg7vzhsVhsdoYjUiKbQ=",

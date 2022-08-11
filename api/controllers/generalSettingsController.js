@@ -66,7 +66,7 @@ module.exports = {
             about_us_mini: req.body.about_us_mini,
 			company_email : req.body.company_email,
 			company_phone : req.body.company_phone,
-			jumbotron_image : 'https://103.163.139.152:8080/images/' + file.filename
+			jumbotron_image : 'https://103.163.139.152:8080/files/' + file.filename
         });
 
         generalSettings.save(function (err, generalSettings) {
@@ -107,7 +107,7 @@ module.exports = {
 			generalSettings.about_us_mini = req.body.about_us_mini ? req.body.about_us_mini : generalSettings.about_us_mini;
 			generalSettings.company_email = req.body.company_email ? req.body.company_email : generalSettings.company_email;
 			generalSettings.company_phone = req.body.company_phone ? req.body.company_phone : generalSettings.company_phone;
-			generalSettings.jumbotron_image = file ? 'https://103.163.139.152:8080/images/' + file.filename : generalSettings.jumbotron_image;
+			generalSettings.jumbotron_image = file ? 'https://103.163.139.152:8080/files/' + file.filename : generalSettings.jumbotron_image;
 			
             generalSettings.save(function (err, generalSettings) {
                 if (err) {

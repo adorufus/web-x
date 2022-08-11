@@ -5,8 +5,32 @@ const uploadImage = require('../utils/imageUploader')
 var PortfolioCategoryModel = mongoose.model('PortfolioCategory')
 var PortfolioModel = mongoose.model('Portfolio')
 var TierModel = mongoose.model('Tier')
+var FileModel = mongoose.model('file')
 
-var baseFileUrl = "https://103.163.139.152:8080/files/";
+var baseFileUrl = 'https://103.163.139.152:8080/files/'
+
+const getItems = (files, types, req, res) =>
+  new Promise((resolve) => {
+    items = []
+    for (var i = 0; i < files.length; i++) {
+      console.log('uploading')
+        var fileModel = new FileModel()
+        fileModel.url = baseFileUrl + files[i].filename
+        fileModel.type = types[i]
+        fileModel.save((err, fileData) => {
+          if (err) {
+            return res.status(400).json({
+              status: 'failure',
+              error: err,
+            })
+          }
+
+          items.push(fileData._id)
+        })
+    }
+
+    setTimeout(() => resolve(items), 1000)
+  })
 
 /**
  * portfolioController.js
@@ -34,7 +58,12 @@ module.exports = {
     var id = req.query.id
 
     await PortfolioCategoryModel.findOne({ _id: id })
-      .populate('tier_list')
+      .populate({
+        path: 'tier_list',
+        populate: {
+          path: 'tier_portofolio_files',
+        },
+      })
       .exec(function (err, category) {
         if (err) {
           return res.status(500).json({
@@ -208,33 +237,35 @@ module.exports = {
   getTier: async function (req, res) {
     var { id } = req.query
 
-    await TierModel.findOne({ _id: id }, (err, tier) => {
-      if (err) {
-        return res.status(400).json({
-          status: 'failure',
-          message: err,
-        })
-      }
+    TierModel.findOne({ _id: id })
+      .populate('tier_portofolio_files')
+      .exec((err, tier) => {
+        if (err) {
+          return res.status(400).json({
+            status: 'failure',
+            message: err,
+          })
+        }
 
-      if (!tier) {
-        return res.status(404).json({
-          status: 'failure',
-          message: 'No such tier found',
-        })
-      }
+        if (!tier) {
+          return res.status(404).json({
+            status: 'failure',
+            message: 'No such tier found',
+          })
+        }
 
-      return res.status(200).json({
-        status: 'success',
-        message: 'Tier found',
-        data: tier,
+        return res.status(200).json({
+          status: 'success',
+          message: 'Tier found',
+          data: tier,
+        })
       })
-    })
   },
 
   getAllTierByPortfolio: function (req, res) {
     var portfolioId = req.query.portfolioId
 
-    TierModel.find({ category_id: portfolioId }, (err, tiers) => {
+    TierModel.find({ category_id: portfolioId }).populate("tier_portofolio_files").exec((err, tiers) => {
       if (err) {
         return res.status(400).json({
           status: 'failure',
@@ -284,7 +315,13 @@ module.exports = {
   createTier: async function (req, res) {
     var files = req.files
 
-    var { categoryId, tier_name, youtube_url, tier_description } = req.body
+    var {
+      categoryId,
+      tier_name,
+      youtube_url,
+      tier_description,
+      fileType,
+    } = req.body
 
     var tier = new TierModel()
 
@@ -293,10 +330,9 @@ module.exports = {
     tier.tier_description = tier_description
     tier.youtube_url = youtube_url
 
-    for (var i = 0; i < files.length; i++) {
-      console.log('uploading')
-      tier.tier_portofolio_files.push(`${baseFileUrl}${files[i].filename}`)
-    }
+    await getItems(files, fileType, req, res).then((result) => {
+      tier.tier_portofolio_files = result
+    })
 
     PortfolioCategoryModel.findOne({ _id: categoryId }, (err, portfolio) => {
       if (err) {

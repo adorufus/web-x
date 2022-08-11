@@ -20,7 +20,7 @@ const cloudinary = require("cloudinary");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/images', express.static('public/uploaded_images'))
+app.use('/files', express.static('public/uploaded_images'))
 
 cloudinary.config({
   cloud_name: "webx-cloud-image",

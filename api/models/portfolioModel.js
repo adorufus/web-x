@@ -25,8 +25,8 @@ var tierSchema = new Schema({
   },
   tier_portofolio_files: [
     {
-      data: Buffer,
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "file",
       required: true,
     },
   ],
@@ -40,5 +40,11 @@ var tierSchema = new Schema({
   }
 });
 
+var fileSchema = new Schema({
+  url: {data: Buffer, type: String, required: true},
+  type: {type: String, required: true}
+})
+
 mongoose.model("Portfolio", portfolioSchema);
+mongoose.model("file", fileSchema);
 mongoose.model("Tier", tierSchema);
