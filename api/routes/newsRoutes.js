@@ -11,7 +11,7 @@ router.get('/news/all', newsController.list);
 /*
  * GET
  */
-router.get('/news/:id', newsController.show);
+router.get('/news', newsController.show);
 
 /*
  * POST
@@ -21,7 +21,7 @@ router.post('/news/add', [middlewares.verifyJwt.verifyToken, middlewares.filesUp
 /*
  * PUT
  */
-router.put('/news/edit/:id', newsController.update);
+router.put('/news/edit', newsController.update);
 
 /*
  * DELETE

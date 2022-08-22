@@ -109,7 +109,7 @@ module.exports = {
    * newsController.update()
    */
   update: function (req, res) {
-    var id = req.params.id
+    var {id} = req.query
     var file = req.file
 
     NewsModel.findOne({ _id: id }, function (err, news) {
@@ -128,6 +128,7 @@ module.exports = {
 
       news.image = file ? baseFileUrl + file.filename : news.image
       news.article = req.body.article ? req.body.article : news.article
+      news.title = req.body.title ? req.body.title : news.title
       news.thumbnail = file ? baseFileUrl + file.filename : news.thumbnail
 
       news.save(function (err, news) {
