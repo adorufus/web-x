@@ -42,7 +42,7 @@ module.exports = {
    * newsController.show()
    */
   show: function (req, res) {
-    var id = req.params.id
+    var id = req.query.id
 
     NewsModel.findOne({ _id: id }, function (err, news) {
       if (err) {
@@ -58,7 +58,10 @@ module.exports = {
         })
       }
 
-      return res.json(news)
+      return res.status(200).json({
+        status: "success",
+        data: news
+      })
     })
   },
 
