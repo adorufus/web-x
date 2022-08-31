@@ -4,6 +4,53 @@ const mongoose = require("mongoose");
 const lodash = require("lodash");
 
 var User = mongoose.model("User");
+var Member = mongoose.model("Member");
+var baseFileUrl = "https://103.163.139.152:8080/files/";
+
+module.exports.addNewTeamMember = function addNewTeamMember(req, res) {
+  var { name, social } = req.body;
+  var file = req.file;
+
+  var member = new Member();
+
+  member.name = name;
+  member.social = social;
+  member.avatar = baseFileUrl + file.filename;
+
+  member.save((err, doc) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({
+        status: "error",
+        error: err,
+      });
+    } else {
+      return res.status(201).json({
+        status: "success",
+        message: "New member added!",
+        data: doc
+      });
+    }
+  });
+};
+
+module.exports.getAllMember = function getAllMember(req, res) {
+  Member.find({}, (err, member) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({
+        status: "error",
+        error: err,
+      });
+    } else {
+      return res.status(201).json({
+        status: "success",
+        message: "Member list found",
+        data: member
+      });
+    }
+  })
+}
 
 module.exports.getUser = function getUserDetails(req, res) {
   var userId = req.query.id;
@@ -19,7 +66,13 @@ module.exports.getUser = function getUserDetails(req, res) {
         return res.status(200).json({
           status: "success",
           message: "User detail found",
-          data: lodash.pick(user, ["_id", "fullName", "email", "username", "role"]),
+          data: lodash.pick(user, [
+            "_id",
+            "fullName",
+            "email",
+            "username",
+            "role",
+          ]),
         });
     });
   } else {
@@ -33,7 +86,13 @@ module.exports.getUser = function getUserDetails(req, res) {
         return res.status(200).json({
           status: "success",
           message: "User detail found",
-          data: lodash.pick(user, ["_id", "fullName", "email", "username", "role"]),
+          data: lodash.pick(user, [
+            "_id",
+            "fullName",
+            "email",
+            "username",
+            "role",
+          ]),
         });
     });
   }
@@ -45,9 +104,11 @@ module.exports.getAllUser = function (req, res) {
       res.status(200).json({
         status: "success",
         message: "All user data found",
-        data: lodash.chain(users).map((user) =>
-          lodash.pick(user, ["_id", "fullName", "email", "username", "role"])
-        ),
+        data: lodash
+          .chain(users)
+          .map((user) =>
+            lodash.pick(user, ["_id", "fullName", "email", "username", "role"])
+          ),
       });
     } else {
       res.status(404).json({

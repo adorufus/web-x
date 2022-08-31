@@ -5,6 +5,7 @@ const middlewares = require('../middlewares/index')
 
 authRoute.post('/auth/login', authControllers.loginController)
 authRoute.post('/auth/register', authControllers.registerController)
+authRoute.post('/member/add', [middlewares.verifyJwt.verifyToken, middlewares.filesUpload.single("avatar-image")], authControllers.userController.addNewTeamMember)
 authRoute.get('/user', middlewares.verifyJwt.verifyToken, authControllers.userController.getUser)
 authRoute.get('/user/all', middlewares.verifyJwt.verifyToken, authControllers.userController.getAllUser)
 authRoute.delete('/user/delete', middlewares.verifyJwt.verifyToken, authControllers.userController.deleteUser)

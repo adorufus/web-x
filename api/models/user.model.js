@@ -27,6 +27,18 @@ var userSchema = new mongoose.Schema({
   saltSecret: String,
 });
 
+var memberList = new mongoose.Schema({
+  name: {
+    type: String,
+  },
+  avatar: {
+    type: String,
+  },
+  social: {
+    type: String
+  }
+})
+
 userSchema.path("email").validate((val) => {
   emailRegex =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -53,4 +65,6 @@ userSchema.methods.generateJwt = function () {
   );
 };
 
+
+mongoose.model("Member", memberList);
 mongoose.model("User", userSchema);
